@@ -1,11 +1,7 @@
 <?php
 /*
 Plugin Name: Logical Plugin Manager
-<<<<<<< HEAD
-Plugin URI: https://yourwebsite.com/plugin-manager
-=======
 Plugin URI: https://github.com/michelediss/wp-logical-plugin-manager
->>>>>>> 1860a8a (url update)
 Description: Centralized management for your WordPress plugins on GitHub and WordPress repository.
 Version: 1.0
 Author: Michele Paolino
