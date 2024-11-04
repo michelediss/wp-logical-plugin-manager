@@ -71,12 +71,18 @@ $wp_repository_plugins = [
     'sassy-social-share' => [
         'slug' => 'sassy-social-share',
     ],
+    'wp-phpmyadmin-extension' => [ // Aggiunto WP phpMyAdmin
+        'slug' => 'wp-phpmyadmin-extension',
+    ],
 ];
+
+
 
 // Hook for processing the form submission
 add_action('admin_post_apply_actions', 'plugin_manager_process_actions');
 
-function plugin_manager_process_actions() {
+function plugin_manager_process_actions()
+{
     if (isset($_POST['action']) && $_POST['action'] === 'apply_actions') {
         global $plugin_repositories, $wp_repository_plugins;
 
@@ -135,7 +141,8 @@ function plugin_manager_process_actions() {
     }
 }
 
-function plugin_manager_handle_bulk_pull($selected_plugins) {
+function plugin_manager_handle_bulk_pull($selected_plugins)
+{
     global $plugin_repositories;
     $success = true;
 
@@ -157,7 +164,8 @@ function plugin_manager_handle_bulk_pull($selected_plugins) {
     return $success;
 }
 
-function plugin_manager_handle_bulk_wp_install($selected_plugins) {
+function plugin_manager_handle_bulk_wp_install($selected_plugins)
+{
     $success = true;
 
     foreach ($selected_plugins as $plugin_slug) {
@@ -176,10 +184,16 @@ function plugin_manager_handle_bulk_wp_install($selected_plugins) {
 // Silent Upgrader Skin
 if (!class_exists('Silent_Upgrader_Skin')) {
     include_once ABSPATH . 'wp-admin/includes/class-wp-upgrader.php';
-    class Silent_Upgrader_Skin extends WP_Upgrader_Skin {
-        public function header() {}
-        public function footer() {}
-        public function error($errors) {
+    class Silent_Upgrader_Skin extends WP_Upgrader_Skin
+    {
+        public function header()
+        {
+        }
+        public function footer()
+        {
+        }
+        public function error($errors)
+        {
             if (is_string($errors)) {
                 $this->errors[] = $errors;
             } elseif (is_wp_error($errors)) {
@@ -188,12 +202,15 @@ if (!class_exists('Silent_Upgrader_Skin')) {
                 }
             }
         }
-        public function feedback($string, ...$args) {}
+        public function feedback($string, ...$args)
+        {
+        }
     }
 }
 
 // Function to install a plugin from the WordPress repository
-function plugin_manager_install_wp_plugin($plugin_slug) {
+function plugin_manager_install_wp_plugin($plugin_slug)
+{
     include_once ABSPATH . 'wp-admin/includes/class-wp-upgrader.php';
     $skin = new Silent_Upgrader_Skin();
     $upgrader = new Plugin_Upgrader($skin);
@@ -210,7 +227,8 @@ function plugin_manager_install_wp_plugin($plugin_slug) {
 
 // Add a menu item under settings
 add_action('admin_menu', 'plugin_manager_menu');
-function plugin_manager_menu() {
+function plugin_manager_menu()
+{
     add_options_page(
         'Logical Plugin Manager',
         'Logical Plugin Manager',
@@ -221,7 +239,8 @@ function plugin_manager_menu() {
 }
 
 // Plugin management page
-function plugin_manager_page() {
+function plugin_manager_page()
+{
     global $plugin_repositories, $wp_repository_plugins;
 
     // Retrieve and display messages
@@ -240,7 +259,7 @@ function plugin_manager_page() {
             <input type="hidden" name="action" value="apply_actions">
             <div class="tablenav top">
                 <div class="alignleft actions bulkactions">
-                    <input type="submit" id="doaction" class="button action" value="Apply">
+                    <input type="submit" id="doaction" class="button action" value="Install">
                 </div>
                 <br class="clear">
             </div>
@@ -265,23 +284,35 @@ function plugin_manager_page() {
                         $is_active = is_plugin_active($plugin_file);
                         $row_class = $is_active ? 'active' : 'inactive';
                         ?>
-                        <tr class="<?php echo $row_class; ?>" data-slug="<?php echo sanitize_title($plugin_name); ?>" data-plugin="<?php echo esc_attr($plugin_file); ?>">
+                        <tr class="<?php echo $row_class; ?>" data-slug="<?php echo sanitize_title($plugin_name); ?>"
+                            data-plugin="<?php echo esc_attr($plugin_file); ?>">
                             <th scope="row" class="check-column">
                                 <label class="label-covers-full-cell" for="checkbox_<?php echo md5($plugin_file); ?>">
                                     <span class="screen-reader-text">Select <?php echo esc_html($plugin_name); ?></span>
                                 </label>
-                                <input type="checkbox" name="selected_plugins[]" value="<?php echo esc_attr($plugin_name); ?>" id="checkbox_<?php echo md5($plugin_file); ?>">
+                                <input type="checkbox" name="selected_plugins[]" value="<?php echo esc_attr($plugin_name); ?>"
+                                    id="checkbox_<?php echo md5($plugin_file); ?>">
                             </th>
                             <td class="plugin-title column-primary">
                                 <strong><?php echo esc_html($plugin_name); ?></strong>
-                                <button type="button" class="toggle-row"><span class="screen-reader-text">Show more details</span></button>
+                                <button type="button" class="toggle-row"><span class="screen-reader-text">Show more
+                                        details</span></button>
                             </td>
                             <td class="column-description desc">
-                                <div class="plugin-description"><p><?php echo esc_html($plugin_data['description']); ?></p></div>
-                                <div class="<?php echo $row_class; ?> second plugin-version-author-uri">Version <?php echo esc_html($plugin_data['version']); ?> | By <a href="<?php echo esc_url($plugin_data['author_uri']); ?>"><?php echo esc_html($plugin_data['author']); ?></a> | <a href="<?php echo esc_url($plugin_data['plugin_uri']); ?>" aria-label="Visit plugin site for <?php echo esc_html($plugin_name); ?>">Visit plugin site</a></div>
+                                <div class="plugin-description">
+                                    <p><?php echo esc_html($plugin_data['description']); ?></p>
+                                </div>
+                                <div class="<?php echo $row_class; ?> second plugin-version-author-uri">Version
+                                    <?php echo esc_html($plugin_data['version']); ?> | By <a
+                                        href="<?php echo esc_url($plugin_data['author_uri']); ?>"><?php echo esc_html($plugin_data['author']); ?></a>
+                                    | <a href="<?php echo esc_url($plugin_data['plugin_uri']); ?>"
+                                        aria-label="Visit plugin site for <?php echo esc_html($plugin_name); ?>">Visit plugin
+                                        site</a>
+                                </div>
                             </td>
                             <td class="column-pull">
-                                <button type="button" class="button" onclick="plugin_manager_pull_plugin('<?php echo esc_js($plugin_name); ?>')">Pull</button>
+                                <button type="button" class="button"
+                                    onclick="plugin_manager_pull_plugin('<?php echo esc_js($plugin_name); ?>')">Pull</button>
                             </td>
                         </tr>
                     <?php endforeach; ?>
@@ -308,7 +339,6 @@ function plugin_manager_page() {
                             <label for="cb-select-all-wp-1"><span class="screen-reader-text">Select All</span></label>
                         </td>
                         <th scope="col" class="manage-column column-name column-primary">Plugin</th>
-                        <th scope="col" class="manage-column column-description">Description</th>
                         <th scope="col" class="manage-column column-install">Install</th>
                     </tr>
                 </thead>
@@ -321,33 +351,37 @@ function plugin_manager_page() {
                         $is_active = $is_installed && is_plugin_active($plugin_file);
                         $row_class = $is_active ? 'active' : ($is_installed ? 'inactive' : 'not-installed');
                         ?>
-                        <tr class="<?php echo $row_class; ?>" data-slug="<?php echo esc_attr($plugin_slug); ?>" data-plugin="<?php echo esc_attr($plugin_slug); ?>">
+                        <tr class="<?php echo $row_class; ?>" data-slug="<?php echo esc_attr($plugin_slug); ?>"
+                            data-plugin="<?php echo esc_attr($plugin_slug); ?>">
                             <th scope="row" class="check-column">
                                 <label class="label-covers-full-cell" for="checkbox_wp_<?php echo md5($plugin_slug); ?>">
                                     <span class="screen-reader-text">Select <?php echo esc_html($plugin_info['name']); ?></span>
                                 </label>
-                                <input type="checkbox" name="selected_wp_plugins[]" value="<?php echo esc_attr($plugin_slug); ?>" id="checkbox_wp_<?php echo md5($plugin_slug); ?>">
+                                <input type="checkbox" name="selected_wp_plugins[]"
+                                    value="<?php echo esc_attr($plugin_slug); ?>"
+                                    id="checkbox_wp_<?php echo md5($plugin_slug); ?>">
                             </th>
                             <td class="plugin-title column-primary">
                                 <strong><?php echo esc_html($plugin_info['name']); ?></strong>
-                                <button type="button" class="toggle-row"><span class="screen-reader-text">Show more details</span></button>
-                            </td>
-                            <td class="column-description desc">
-                                <div class="plugin-description"><p><?php echo esc_html($plugin_info['short_description']); ?></p></div>
-                                <div class="<?php echo $row_class; ?> second plugin-version-author-uri">Version <?php echo esc_html($plugin_info['version']); ?> | By <a href="<?php echo esc_url($plugin_info['author_profile']); ?>"><?php echo esc_html($plugin_info['author']); ?></a> | <a href="<?php echo esc_url($plugin_info['homepage']); ?>" aria-label="Visit plugin site for <?php echo esc_html($plugin_info['name']); ?>">Visit plugin site</a></div>
+                                <button type="button" class="toggle-row"><span class="screen-reader-text">Show more
+                                        details</span></button>
                             </td>
                             <td class="column-install">
                                 <?php if ($is_active): ?>
                                     <span>Active</span>
                                 <?php elseif ($is_installed): ?>
-                                    <button type="button" class="button" onclick="plugin_manager_activate_plugin('<?php echo esc_js($plugin_slug); ?>')">Activate</button>
+                                    <button type="button" class="button"
+                                        onclick="plugin_manager_activate_plugin('<?php echo esc_js($plugin_slug); ?>')">Activate</button>
                                 <?php else: ?>
-                                    <button type="button" class="button" onclick="plugin_manager_install_wp_plugin('<?php echo esc_js($plugin_slug); ?>')">Install</button>
+                                    <button type="button" class="button"
+                                        onclick="plugin_manager_install_wp_plugin('<?php echo esc_js($plugin_slug); ?>')">Install</button>
                                 <?php endif; ?>
                             </td>
+
                         </tr>
                     <?php endforeach; ?>
                 </tbody>
+
                 <tfoot>
                     <tr>
                         <td id="cb" class="manage-column column-cb check-column">
@@ -355,7 +389,6 @@ function plugin_manager_page() {
                             <label for="cb-select-all-wp-2"><span class="screen-reader-text">Select All</span></label>
                         </td>
                         <th scope="col" class="manage-column column-name column-primary">Plugin</th>
-                        <th scope="col" class="manage-column column-description">Description</th>
                         <th scope="col" class="manage-column column-install">Install</th>
                     </tr>
                 </tfoot>
@@ -365,25 +398,25 @@ function plugin_manager_page() {
 
     <script>
         // Function for "Select All" checkbox
-        document.getElementById('cb-select-all-1').addEventListener('click', function(event) {
+        document.getElementById('cb-select-all-1').addEventListener('click', function (event) {
             var checkboxes = document.querySelectorAll('input[name="selected_plugins[]"]');
             for (var checkbox of checkboxes) {
                 checkbox.checked = event.target.checked;
             }
         });
-        document.getElementById('cb-select-all-2').addEventListener('click', function(event) {
+        document.getElementById('cb-select-all-2').addEventListener('click', function (event) {
             var checkboxes = document.querySelectorAll('input[name="selected_plugins[]"]');
             for (var checkbox of checkboxes) {
                 checkbox.checked = event.target.checked;
             }
         });
-        document.getElementById('cb-select-all-wp-1').addEventListener('click', function(event) {
+        document.getElementById('cb-select-all-wp-1').addEventListener('click', function (event) {
             var checkboxes = document.querySelectorAll('input[name="selected_wp_plugins[]"]');
             for (var checkbox of checkboxes) {
                 checkbox.checked = event.target.checked;
             }
         });
-        document.getElementById('cb-select-all-wp-2').addEventListener('click', function(event) {
+        document.getElementById('cb-select-all-wp-2').addEventListener('click', function (event) {
             var checkboxes = document.querySelectorAll('input[name="selected_wp_plugins[]"]');
             for (var checkbox of checkboxes) {
                 checkbox.checked = event.target.checked;
@@ -467,14 +500,16 @@ function plugin_manager_page() {
     </script>
     <style>
         .wp-list-table.plugins .not-installed {
-            background-color: #f9f9f9; /* Light gray for non-installed plugins */
+            background-color: #f9f9f9;
+            /* Light gray for non-installed plugins */
         }
     </style>
     <?php
 }
 
 // Function to get WordPress plugin information from repository with caching
-function plugin_manager_get_wp_plugin_info($plugin_slug) {
+function plugin_manager_get_wp_plugin_info($plugin_slug)
+{
     $cache_key = 'plugin_info_' . $plugin_slug;
     $plugin_info = get_transient($cache_key);
 
@@ -519,7 +554,8 @@ function plugin_manager_get_wp_plugin_info($plugin_slug) {
 }
 
 // Function to install or update a plugin
-function plugin_manager_install_or_update_plugin($plugin_name, $plugin_url) {
+function plugin_manager_install_or_update_plugin($plugin_name, $plugin_url)
+{
     include_once ABSPATH . 'wp-admin/includes/class-wp-upgrader.php';
     $skin = new Silent_Upgrader_Skin();
     $upgrader = new Plugin_Upgrader($skin);
@@ -534,7 +570,8 @@ function plugin_manager_install_or_update_plugin($plugin_name, $plugin_url) {
 }
 
 // Function to get the plugin file path
-function plugin_manager_get_plugin_file($plugin_name) {
+function plugin_manager_get_plugin_file($plugin_name)
+{
     $plugins = get_plugins();
     foreach ($plugins as $plugin_file => $plugin_data) {
         if ($plugin_data['Name'] == $plugin_name) {
@@ -545,7 +582,8 @@ function plugin_manager_get_plugin_file($plugin_name) {
 }
 
 // Function to get the plugin file path by slug
-function plugin_manager_get_plugin_file_by_slug($plugin_slug) {
+function plugin_manager_get_plugin_file_by_slug($plugin_slug)
+{
     $plugins = get_plugins();
     foreach ($plugins as $plugin_file => $plugin_data) {
         $plugin_file_slug = dirname($plugin_file);
@@ -558,14 +596,16 @@ function plugin_manager_get_plugin_file_by_slug($plugin_slug) {
 
 // Schedule a cron job for automatic updates
 add_action('wp', 'plugin_manager_schedule_auto_update');
-function plugin_manager_schedule_auto_update() {
+function plugin_manager_schedule_auto_update()
+{
     if (!wp_next_scheduled('plugin_manager_auto_update')) {
         wp_schedule_event(strtotime('03:33:00'), 'daily', 'plugin_manager_auto_update');
     }
 }
 
 add_action('plugin_manager_auto_update', 'plugin_manager_auto_update');
-function plugin_manager_auto_update() {
+function plugin_manager_auto_update()
+{
     global $plugin_repositories;
 
     foreach ($plugin_repositories as $plugin_name => $plugin_data) {
@@ -575,13 +615,15 @@ function plugin_manager_auto_update() {
 
 // Clean up the cron job when the plugin is deactivated
 register_deactivation_hook(__FILE__, 'plugin_manager_deactivation');
-function plugin_manager_deactivation() {
+function plugin_manager_deactivation()
+{
     wp_clear_scheduled_hook('plugin_manager_auto_update');
 }
 
 // Hook for activating a plugin
 add_action('admin_post_activate_plugin', 'plugin_manager_activate_plugin');
-function plugin_manager_activate_plugin() {
+function plugin_manager_activate_plugin()
+{
     if (isset($_POST['plugin_slug'])) {
         $plugin_slug = sanitize_text_field($_POST['plugin_slug']);
         $plugin_file = plugin_manager_get_plugin_file_by_slug($plugin_slug);
