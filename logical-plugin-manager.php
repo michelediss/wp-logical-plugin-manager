@@ -35,29 +35,23 @@ $plugin_repositories = [
 
 // Array of plugins from the WordPress repository
 $wp_repository_plugins = [
-    'all-in-one-wp-security-and-firewall' => [
-        'slug' => 'all-in-one-wp-security-and-firewall',
-    ],
-    'cookie-law-info' => [
-        'slug' => 'cookie-law-info',
-    ],
-    'updraftplus' => [
-        'slug' => 'updraftplus',
-    ],
-    'contact-form-7' => [
-        'slug' => 'contact-form-7',
-    ],
-    'wp-maintenance' => [
-        'slug' => 'wp-maintenance',
-    ],
     'advanced-custom-fields' => [
         'slug' => 'advanced-custom-fields',
+    ],
+    'all-in-one-wp-security-and-firewall' => [
+        'slug' => 'all-in-one-wp-security-and-firewall',
     ],
     'breadcrumb-navxt' => [
         'slug' => 'breadcrumb-navxt',
     ],
     'classic-editor' => [
         'slug' => 'classic-editor',
+    ],
+    'contact-form-7' => [
+        'slug' => 'contact-form-7',
+    ],
+    'cookie-law-info' => [
+        'slug' => 'cookie-law-info',
     ],
     'koko-analytics' => [
         'slug' => 'koko-analytics',
@@ -68,13 +62,23 @@ $wp_repository_plugins = [
     'media-library-assistant' => [
         'slug' => 'media-library-assistant',
     ],
+    'merge-minify-refresh' => [ // Added Merge + Minify + Refresh by Launch Interactive
+        'slug' => 'merge-minify-refresh',
+    ],
     'sassy-social-share' => [
         'slug' => 'sassy-social-share',
     ],
-    'wp-phpmyadmin-extension' => [ // Aggiunto WP phpMyAdmin
+    'updraftplus' => [
+        'slug' => 'updraftplus',
+    ],
+    'wp-maintenance' => [
+        'slug' => 'wp-maintenance',
+    ],
+    'wp-phpmyadmin-extension' => [ // Added WP phpMyAdmin
         'slug' => 'wp-phpmyadmin-extension',
     ],
 ];
+
 
 
 
